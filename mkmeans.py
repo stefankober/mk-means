@@ -1,3 +1,13 @@
+__author__ = “Stefan Kober”
+__copyright__ = “Copyright 2021, Stefan Kober”
+__credits__ = [“Stefan Kober”]
+__license__ = “GPL v3”
+__version__ = “0.1.0”
+__maintainer__ = “Stefan Kober”
+__email__ = “stefankober.github@nym.hush.com”
+__status__ = “Dev”
+
+
 from numba import njit
 import numpy as np
 from sklearn.cluster import KMeans
