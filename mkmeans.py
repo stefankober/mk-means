@@ -52,6 +52,7 @@ def create_adjacency_list(cluster_centers, radius_list):
     return close_points
 
 @njit
+@njit
 def join_clusters(adjacency_list):
     """
     Takes an adjacency list, creates clusters.
@@ -62,6 +63,9 @@ def join_clusters(adjacency_list):
     indices = list(range(len(adjacency_list)))
     while indices:
         open_numbers.append(indices.pop())
+        for i in adjacency_list[open_numbers[0]]:
+            if not i in open_numbers:
+                open_numbers.append(i)
         while open_numbers:
             number = open_numbers.pop()
             for i in indices:
