@@ -8,6 +8,9 @@ __email__ = "stefankober.github@nym.hush.com"
 __status__ = "Dev"
 
 
+### Important note: this proof of concept implementation works only with
+### 2 dimensional data sets
+
 from numba import njit
 import numpy as np
 from sklearn.cluster import KMeans
