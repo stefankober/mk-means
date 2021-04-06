@@ -39,7 +39,7 @@ def create_radius_list(X, cluster_centers, labels):
         )
     return radius_list
 
-#@njit
+@njit
 def create_adjacency_list(cluster_centers, radius_list):
     """
     Takes the cluster centers and radii.
@@ -53,6 +53,7 @@ def create_adjacency_list(cluster_centers, radius_list):
         close_points.append(np.where(adjacency_matrix == True)[0])
     return close_points
 
+@njit
 def join_clusters(adjacency_list):
     """
     Takes an adjacency list, creates clusters.
@@ -79,7 +80,7 @@ def join_clusters(adjacency_list):
         closed_numbers = [np.int64(x) for x in range(0)]
     return clusters 
 
-@njit
+#@njit
 def generate_new_labels(labels, clusters):
     """
     Takes the old labels and clusters, and
@@ -103,9 +104,9 @@ def generate_macroclusters(X, cluster_centers, labels):
     typed_a_list = List()
     [typed_a_list.append(x) for x in a_list]
     clusters = join_clusters(typed_a_list)
-    typed_clusters = List()
-    [typed_clusters.append(x) for x in clusters]
-    return generate_new_labels(labels, typed_clusters)
+    #typed_clusters = List()
+    #[typed_clusters.append(x) for x in clusters]
+    return generate_new_labels(labels, clusters)
 
 
 ## Prerequisites for k-line-plots
