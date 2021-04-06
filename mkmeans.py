@@ -8,9 +8,6 @@ __email__ = "stefankober.github@nym.hush.com"
 __status__ = "Dev"
 
 
-### Important note: this proof of concept implementation works only with
-### 2 dimensional data sets
-
 from numba import njit
 import numpy as np
 from sklearn.cluster import KMeans
@@ -34,13 +31,15 @@ def create_radius_list(X, cluster_centers, labels):
     Will not work with algorithms that detect outlier, has no
     filter for label -1.
     """
+    assert X.shape[0] == labels.shape[0]
     radius_list = np.empty(cluster_centers.shape[0], dtype="float64")
     for i in np.arange(cluster_centers.shape[0]):
-        radius_list[i] = np.amax(np.sqrt((X[labels == i][:, 0]-cluster_centers[i][0])**2 + 
-                      (X[labels == i][:, 1]-cluster_centers[i][1])**2))
+        radius_list[i] = np.amax(
+            np.sqrt(np.sum((X[labels == i]-cluster_centers[i])**2, axis=1))
+        )
     return radius_list
 
-@njit
+#@njit
 def create_adjacency_list(cluster_centers, radius_list):
     """
     Takes the cluster centers and radii.
@@ -49,12 +48,11 @@ def create_adjacency_list(cluster_centers, radius_list):
     """
     close_points = []
     for i in np.arange(cluster_centers.shape[0]):
-        adjacency_matrix = (np.sqrt((cluster_centers[i][0]-cluster_centers[:, 0])**2 + 
-                      (cluster_centers[i][1]-cluster_centers[:, 1])**2) < radius_list[i]+radius_list)
+        adjacency_matrix = np.sqrt(
+            np.sum((cluster_centers[i] - cluster_centers)**2, axis=1)) < radius_list[i]+radius_list
         close_points.append(np.where(adjacency_matrix == True)[0])
     return close_points
 
-@njit
 def join_clusters(adjacency_list):
     """
     Takes an adjacency list, creates clusters.
