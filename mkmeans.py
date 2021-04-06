@@ -55,7 +55,6 @@ def create_adjacency_list(cluster_centers, radius_list):
     return close_points
 
 @njit
-@njit
 def join_clusters(adjacency_list):
     """
     Takes an adjacency list, creates clusters.
